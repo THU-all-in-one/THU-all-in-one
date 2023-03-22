@@ -9,7 +9,7 @@ import './static/css/App.css';
 import { Avatar, Chip } from '@mui/material';
 
 function AppMain() {
-    const icons = {
+    const icons: {[key: string]: string} = {
             TypeScript: iTypeScript,
             Electron: iElectron,
             React: iReact,
