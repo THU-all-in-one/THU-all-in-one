@@ -91,6 +91,7 @@
     ]
   },
   "jest": {
+    "maxConcurrency": 1,
     "projects": [
       {
         "roots": [
