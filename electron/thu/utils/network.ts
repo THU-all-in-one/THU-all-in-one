@@ -1,6 +1,6 @@
 import _fetch from 'cross-fetch';
 import { decode } from 'iconv-lite';
-import { ApiError } from './exception';
+import { ApiError } from '../exception';
 
 interface CookieContent {
     [key: string]: string;

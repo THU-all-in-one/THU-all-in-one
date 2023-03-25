@@ -1,11 +1,13 @@
 import { Credential, BaseHelper } from './utils/network';
-import { andRegEx, zhjwRegEx } from './utils/regex';
-import urlSet from './url';
+import regEx from './consts/regex';
+import urlSet from './consts/url';
 import cheerio from 'cheerio';
-import { ErrorCode, ApiError } from './utils/exception';
+import { ErrorCode, ApiError } from './exception';
 
 class InfoHelper extends BaseHelper {
     private _zhjwRoam?: string[] | undefined;
+    private _userType?: 'g' | 'ug' | undefined;
+
     public get zhjwRoam(): string[] {
         if (this._zhjwRoam === undefined) {
             throw new ApiError(ErrorCode.NOT_LOGGED_IN);
@@ -14,6 +16,12 @@ class InfoHelper extends BaseHelper {
     }
     private set zhjwRoam(value: string[]) {
         this._zhjwRoam = value;
+    }
+    public get userType(): 'g' | 'ug' | undefined {
+        return this._userType;
+    }
+    private set userType(value: 'g' | 'ug' | undefined) {
+        this._userType = value;
     }
 
     login = async (credential: Credential) => {
@@ -32,9 +40,20 @@ class InfoHelper extends BaseHelper {
         );
         try {
             const result = await this.query(urlSet.info.index());
+            const studentType = await this.query(urlSet.info.roam(2613));
             this.zhjwRoam = result
-                .match(zhjwRegEx)!
-                .map((e) => e.replace(andRegEx, '&'));
+                .match(regEx.zhjwRegEx)!
+                .map((e) => e.replace(regEx.andRegEx, '&'));
+            switch (regEx.userTypeRegEx.exec(studentType)![1]) {
+                case 'yjs_ShowYjsXx':
+                    this.userType = 'g';
+                    break;
+                case 'bks_ShowBksXx':
+                    this.userType = 'ug';
+                    break;
+                default:
+                    this.userType = undefined;
+            }
         } catch (e) {
             throw new ApiError(ErrorCode.BAD_CREDENTIAL);
         }

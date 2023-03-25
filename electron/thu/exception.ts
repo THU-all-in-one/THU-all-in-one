@@ -7,7 +7,7 @@ class ApiError extends Error {
             Error.captureStackTrace(this, ApiError);
         }
 
-        this.name = 'NetworkError';
+        this.name = `ApiError: ${code}`;
         this.code = code;
     }
 }

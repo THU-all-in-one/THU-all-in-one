@@ -1,5 +1,7 @@
 import { InfoHelper } from './info';
-export { InfoHelper };
+import { ZhjwHelper } from './zhjw';
+export { InfoHelper, ZhjwHelper };
 export default {
-    InfoHelper: InfoHelper
+    InfoHelper: InfoHelper,
+    ZhjwHelper: ZhjwHelper
 };
